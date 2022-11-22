@@ -86,7 +86,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build_args: PYTCT_WHL=${{ steps.pytct.outputs.name }}
+          build-args: PYTCT_WHL=${{ steps.pytct.outputs.name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
