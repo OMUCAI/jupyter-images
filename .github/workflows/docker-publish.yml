@@ -63,7 +63,7 @@ jobs:
           repo: 'OMUCAI/PyTCT'
           version: 'latest'
           regex: true
-          file: 'pytct-.*-cp310-cp310-manylinux_.*_x86_64\\.whl'
+          file: 'pytct-.*-cp310-cp310-manylinux_.*_x86_64\.whl'
           target: 'pytct/'
           token: ${{ secrets.PYTCT_PA_TOKEN }}
 
