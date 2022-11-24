@@ -65,7 +65,9 @@ jobs:
           file: 'pytct-0.8.1-cp310-cp310-manylinux_2_31_x86_64.whl'
           target: 'pytct/pytct.whl'
           token: ${{ secrets.PYTCT_PA_TOKEN }}
-
+        
+      - run: ls -lah pytct
+    
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
