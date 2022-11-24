@@ -66,7 +66,14 @@ jobs:
           target: './pytct/'
           token: ${{ secrets.PYTCT_PA_TOKEN }}
         
-      - run: ls -lah
+      - run: ls -lah pytct
+
+      - name: Glob match
+        uses: tj-actions/glob@v16
+        id: glob
+        with:
+          files: pytct*.whl
+          working-directory: './pytct'
     
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -87,7 +94,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: PYTCT_WHL=pytct.whl
+          build-args: PYTCT_WHL=${{ steps.glob.outputs.paths }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
