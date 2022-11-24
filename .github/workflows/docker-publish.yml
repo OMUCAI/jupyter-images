@@ -68,7 +68,7 @@ jobs:
           token: ${{ secrets.PYTCT_PA_TOKEN }}
       
       - name: pytct release output
-        run: echo "${{ steps.pytct.outputs.name }}"
+        run: echo "${{ steps.pytct.outputs }}"
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
