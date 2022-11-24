@@ -57,7 +57,6 @@ jobs:
 
       # Get Latest PyTCT
       - name: Fetch Github Release Asset
-        id: pytct
         uses: dsaltares/fetch-gh-release-asset@1.1.0
         with:
           repo: 'OMUCAI/PyTCT'
@@ -66,9 +65,6 @@ jobs:
           file: 'pytct-0.8.1-cp310-cp310-manylinux_2_31_x86_64.whl'
           target: 'pytct/pytct.whl'
           token: ${{ secrets.PYTCT_PA_TOKEN }}
-      
-      - name: pytct release output
-        run: echo "${{ toJSON(steps.pytct.outputs) }}"
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -89,7 +85,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: PYTCT_WHL=${{ steps.pytct.outputs.name }}
+          build-args: PYTCT_WHL=pytct.whl
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
