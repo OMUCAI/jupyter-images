@@ -56,8 +56,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Get Latest PyTCT
-      - id: pytct
-        name: Fetch Github Release Asset
+      - name: Fetch Github Release Asset
+        id: pytct
         uses: dsaltares/fetch-gh-release-asset@1.1.0
         with:
           repo: 'OMUCAI/PyTCT'
@@ -66,6 +66,9 @@ jobs:
           file: 'pytct-.*-cp310-cp310-manylinux_.*_x86_64\.whl'
           target: 'pytct/'
           token: ${{ secrets.PYTCT_PA_TOKEN }}
+      
+      - name: pytct release output
+        run: echo "${{ steps.pytct.outputs.name }}"
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
