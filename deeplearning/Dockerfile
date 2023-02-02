@@ -205,6 +205,7 @@ USER root
 RUN apt-get update --yes && \
     apt-get install --yes --no-install-recommends \
     # Common useful utilities
+    curl \
     git \
     nano-tiny \
     tzdata \
@@ -379,33 +380,43 @@ RUN fix-permissions $CONDA_DIR
 
 # RUN jupyter labextension install @jupyterlab/github
 # RUN pip install jupyterlab-git
-RUN pip install jupyterlab-drawio
-RUN jupyter nbextension enable --py --sys-prefix ipyleaflet
-RUN jupyter labextension install jupyterlab-plotly
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager plotlywidget
+# RUN pip install jupyterlab-drawio
+# RUN jupyter nbextension enable --py --sys-prefix ipyleaflet
+# RUN jupyter labextension install jupyterlab-plotly
+# RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager plotlywidget
 # RUN pip install --no-cache-dir jupyter-tabnine  --user && \
 #   jupyter nbextension install --py jupyter_tabnine --user && \
 #   jupyter nbextension enable --py jupyter_tabnine --user && \
 #   jupyter serverextension enable --py jupyter_tabnine --user
-RUN pip install --no-cache-dir jupyter_contrib_nbextensions \
-  jupyter_nbextensions_configurator rise
+# RUN pip install --no-cache-dir jupyter_contrib_nbextensions \
+#   jupyter_nbextensions_configurator rise
 #  jupyter nbextension enable codefolding/main
 # RUN jupyter labextension install @ijmbarr/jupyterlab_spellchecker
 
 RUN fix-permissions /home/$NB_USER
 
+# install code server and extension
+ENV CODE_VERSION=4.9.1
+RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb \
+    && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
+    && rm -f code-server_${CODE_VERSION}_amd64.deb 
+RUN /opt/conda/bin/conda install -c conda-forge jupyter-server-proxy jupyter-vscode-proxy
+
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
+# install vscode extension(python, jupyter)
+RUN code-server --install-extension ms-python.python ms-toolsai.jupyter 
+
 ARG PYTCT_WHL=pytct-0.7.5-cp310-cp310-manylinux_2_31_x86_64.whl
 COPY pytct/${PYTCT_WHL} /tmp/
-RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} && \
-    fix-permissions "${CONDA_DIR}" && \
+RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} nbgitpuller 
+
+USER root
+RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-RUN pip install --quiet --no-cache-dir nbgitpuller && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+USER ${NB_UID}
 
 # Copy jupyter_notebook_config.json
 COPY deeplearning/jupyter_notebook_config.json /etc/jupyter/
