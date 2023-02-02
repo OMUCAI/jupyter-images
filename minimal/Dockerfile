@@ -13,12 +13,10 @@ RUN apt-get update --yes && \
 
 # install code server and extension
 ENV CODE_VERSION=4.9.1
-RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb \
-    && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
-    && rm -f code-server_${CODE_VERSION}_amd64.deb 
-    # && code-server --install-extension ms-toolsai.jupyter
-RUN /opt/conda/bin/conda install -c conda-forge jupyter-server-proxy
-RUN /opt/conda/bin/conda install -c conda-forge jupyter-vscode-proxy
+RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_arm64.deb \
+    && dpkg -i code-server_${CODE_VERSION}_arm64.deb \
+    && rm -f code-server_${CODE_VERSION}_arm64.deb 
+RUN /opt/conda/bin/conda install -c conda-forge jupyter-server-proxy jupyter-vscode-proxy
 
 USER ${NB_UID}
 
@@ -26,14 +24,14 @@ USER ${NB_UID}
 RUN code-server --install-extension ms-python.python ms-toolsai.jupyter 
 
 # install pytct
-ARG PYTCT_WHL=pytct-0.7.5-cp310-cp310-manylinux_2_31_x86_64.whl
+ARG PYTCT_WHL=PyTCT-0.9.4-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
 COPY pytct/${PYTCT_WHL} /tmp/
-RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} && \
-    fix-permissions "${CONDA_DIR}" && \
+RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} nbgitpuller
+
+USER root
+RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-RUN pip install --quiet --no-cache-dir nbgitpuller && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+USER ${NB_UID}
 
 WORKDIR "${HOME}"
