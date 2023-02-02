@@ -22,17 +22,18 @@ RUN /opt/conda/bin/conda install -c conda-forge jupyter-vscode-proxy
 
 USER ${NB_UID}
 
+# install vscode extension(python, jupyter)
 RUN code-server --install-extension ms-python.python ms-toolsai.jupyter 
 
+# install pytct
 ARG PYTCT_WHL=pytct-0.7.5-cp310-cp310-manylinux_2_31_x86_64.whl
+COPY pytct/${PYTCT_WHL} /tmp/
+RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
 
-# COPY pytct/${PYTCT_WHL} /tmp/
-# RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} && \
-#     fix-permissions "${CONDA_DIR}" && \
-#     fix-permissions "/home/${NB_USER}"
-
-# RUN pip install --quiet --no-cache-dir nbgitpuller && \
-#     fix-permissions "${CONDA_DIR}" && \
-#     fix-permissions "/home/${NB_USER}"
+RUN pip install --quiet --no-cache-dir nbgitpuller && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
 
 WORKDIR "${HOME}"
