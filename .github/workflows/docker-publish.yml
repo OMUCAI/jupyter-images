@@ -64,10 +64,10 @@ jobs:
         id: pytct
         uses: dsaltares/fetch-gh-release-asset@1.1.0
         with:
-          repo: 'OMUCAI/PyTCT'
+          repo: 'OMUCAI/PyTCT-docs'
           version: 'latest'
           regex: true
-          file: 'pytct-.*-cp310-cp310-manylinux_.*_x86_64.whl'
+          file: 'PyTCT-.*-cp310-cp310-manylinux_.*_x86_64.whl'
           target: './pytct/'
           token: ${{ secrets.PYTCT_PA_TOKEN }}
 
@@ -75,7 +75,7 @@ jobs:
         uses: tj-actions/glob@v16
         id: glob
         with:
-          files: pytct*.whl
+          files: PyTCT*.whl
           working-directory: './pytct'
     
       # Extract metadata (tags, labels) for Docker
