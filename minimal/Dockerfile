@@ -13,9 +13,9 @@ RUN apt-get update --yes && \
 
 # install code server and extension
 ENV CODE_VERSION=4.9.1
-RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_arm64.deb \
-    && dpkg -i code-server_${CODE_VERSION}_arm64.deb \
-    && rm -f code-server_${CODE_VERSION}_arm64.deb 
+RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb \
+    && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
+    && rm -f code-server_${CODE_VERSION}_amd64.deb 
     # && code-server --install-extension ms-toolsai.jupyter
 RUN /opt/conda/bin/conda install -c conda-forge jupyter-server-proxy
 RUN /opt/conda/bin/conda install -c conda-forge jupyter-vscode-proxy
