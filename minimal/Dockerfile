@@ -29,7 +29,7 @@ COPY pytct/${PYTCT_WHL} /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} nbgitpuller
 
 # install scglib
-ARG SCG_ROBOT_LIB=SCGRobotLib-1.0.0-py3-none-any.whl
+ARG SCG_ROBOT_LIB=SCGRobotLib-1.0.1-py3-none-any.whl
 COPY scglib/${SCG_ROBOT_LIB} /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${SCG_ROBOT_LIB}
 
