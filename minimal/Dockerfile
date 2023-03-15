@@ -28,6 +28,11 @@ ARG PYTCT_WHL=PyTCT-0.9.4-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch
 COPY pytct/${PYTCT_WHL} /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} nbgitpuller
 
+# install scglib
+ARG SCG_ROBOT_LIB=SCGRobotLib-1.0.0-py3-none-any.whl
+COPY scglib/${SCG_ROBOT_LIB} /tmp/
+RUN pip install --quiet --no-cache-dir /tmp/${SCG_ROBOT_LIB}
+
 USER root
 RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
