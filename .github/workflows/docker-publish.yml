@@ -67,7 +67,7 @@ jobs:
           regex: true
           file: 'PyTCT-.*-cp310-cp310-manylinux_.*_x86_64.whl'
           target: './pytct/'
-          token: ${{ secrets.PYTCT_PA_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Glob match
         uses: tj-actions/glob@v16
