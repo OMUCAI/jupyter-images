@@ -32,6 +32,11 @@ ARG SCG_ROBOT_LIB=SCGRobotLib-1.0.2-py3-none-any.whl
 COPY scglib/${SCG_ROBOT_LIB} /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${SCG_ROBOT_LIB}
 
+# install experiment
+ARG EXPERIMENT=experiment-1.0-py3-none-any.whl
+COPY experiment/${EXPERIMENT} /tmp/
+RUN pip install --quiet --no-cache-dir /tmp/${EXPERIMENT}
+
 USER root
 RUN fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
