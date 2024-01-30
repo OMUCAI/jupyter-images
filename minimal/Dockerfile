@@ -35,7 +35,7 @@ RUN pip install --quiet --no-cache-dir /tmp/${SCG_ROBOT_LIB}
 
 # install experiment
 ARG EXPERIMENT=experiment-1.0-py3-none-any.whl
-COPY scglib/${EXPERIMENT} /tmp/
+COPY experiment/${EXPERIMENT} /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${EXPERIMENT}
 
 USER root
