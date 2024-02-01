@@ -23,6 +23,7 @@ USER ${NB_UID}
 # install vscode extension(python, jupyter)
 RUN code-server --install-extension ms-python.python ms-toolsai.jupyter 
 
+# Overwrite latest version by github action
 ARG PYTCT_WHL=pytct-0.7.5-cp310-cp310-manylinux_2_31_x86_64.whl
 COPY pytct/${PYTCT_WHL} /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} nbgitpuller 

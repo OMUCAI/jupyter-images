@@ -24,6 +24,7 @@ USER ${NB_UID}
 RUN code-server --install-extension ms-python.python ms-toolsai.jupyter 
 
 # install pytct
+# Overwrite latest version by github action
 ARG PYTCT_WHL=PyTCT-0.9.4-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
 COPY pytct/${PYTCT_WHL} /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} nbgitpuller
