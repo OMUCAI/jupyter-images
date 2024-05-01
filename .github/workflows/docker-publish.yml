@@ -83,8 +83,8 @@ jobs:
           repo: 'OMUCAI/PyTCT-docs'
           version: 'latest'
           regex: true
-          file: 'PyTCT-.*-cp310-cp310-manylinux_.*_x86_64.whl'
-          target: './pytct/'
+          file: 'PyTCT-.*-cp311-cp311-manylinux_.*_x86_64.whl'
+          target: './additional_package/'
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Glob match
