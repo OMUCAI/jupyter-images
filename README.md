@@ -23,8 +23,4 @@ Base image: jupyter/datascience-notebook
 
 ### deeplearning
 Base image: cschranz/gpu-jupyter  
-[Dockerhub](https://hub.docker.com/r/jupyter/datascience-notebook), [Github](https://github.com/iot-salzburg/gpu-jupyter)  
-
-This image is so huge that it cannot be used as a base image.
-Generating a Dockerfile to build.  
-Please see [README](./deeplearning/README.md)
+[Dockerhub](https://hub.docker.com/r/cschranz/gpu-jupyter), [Github](https://github.com/iot-salzburg/gpu-jupyter)  
