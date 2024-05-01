@@ -1,5 +1,4 @@
-
-FROM jupyter/minimal-notebook:2022-11-14
+FROM jupyter/minimal-notebook:x86_64-python-3.11
 
 LABEL maintainer="Masahiro Konishi <konikoni428@gmail.com>"
 
@@ -23,21 +22,13 @@ USER ${NB_UID}
 # install vscode extension(python, jupyter)
 RUN code-server --install-extension ms-python.python ms-toolsai.jupyter 
 
-# install pytct
-# Overwrite latest version by github action
-ARG PYTCT_WHL=PyTCT-0.9.4-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
-COPY pytct/${PYTCT_WHL} /tmp/
-RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} nbgitpuller
-
-# install scglib
+# install pytct, scglib, experiment
+# Set latest version by github action
+ARG PYTCT_WHL
 ARG SCG_ROBOT_LIB=SCGRobotLib-1.0.2-py3-none-any.whl
-COPY scglib/${SCG_ROBOT_LIB} /tmp/
-RUN pip install --quiet --no-cache-dir /tmp/${SCG_ROBOT_LIB}
-
-# install experiment
 ARG EXPERIMENT=experiment-1.0-py3-none-any.whl
-COPY experiment/${EXPERIMENT} /tmp/
-RUN pip install --quiet --no-cache-dir /tmp/${EXPERIMENT}
+COPY additional_package/*.whl /tmp/
+RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} /tmp/${SCG_ROBOT_LIB} /tmp/${EXPERIMENT}
 
 USER root
 RUN fix-permissions "${CONDA_DIR}" && \
