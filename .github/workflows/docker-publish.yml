@@ -92,7 +92,7 @@ jobs:
         id: glob
         with:
           files: PyTCT*.whl
-          working-directory: './pytct'
+          working-directory: './additional_package'
     
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
