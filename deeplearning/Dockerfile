@@ -4,9 +4,7 @@ LABEL maintainer="Masahiro Konishi <konikoni428@gmail.com>"
 
 # Graphviz is already installed
 
-# install code server and extension
-ENV CODE_VERSION=4.9.1
-RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb \
+USER root
     && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
     && rm -f code-server_${CODE_VERSION}_amd64.deb 
 RUN /opt/conda/bin/conda install -c conda-forge jupyter-server-proxy jupyter-vscode-proxy
