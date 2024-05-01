@@ -10,11 +10,11 @@ RUN apt-get update --yes && \
     graphviz && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# install code server and extension
-ENV CODE_VERSION=4.9.1
-RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb \
+# install latest code server and extension
+RUN CODE_VERSION=$(curl -sL https://api.github.com/repos/coder/code-server/releases/latest | grep '"tag_name":' | sed 's/.*"v\([0-9.]*\)".*/\1/') \
+    && curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb \
     && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
-    && rm -f code-server_${CODE_VERSION}_amd64.deb 
+    && rm -f code-server_${CODE_VERSION}_amd64.deb
 RUN /opt/conda/bin/conda install -c conda-forge jupyter-server-proxy jupyter-vscode-proxy
 
 USER ${NB_UID}
