@@ -30,8 +30,9 @@ ARG SCG_ROBOT_LIB=SCGRobotLib-1.0.2-py3-none-any.whl
 ARG EXPERIMENT=experiment-1.0-py3-none-any.whl
 COPY additional_package/*.whl /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} /tmp/${SCG_ROBOT_LIB} /tmp/${EXPERIMENT}
+# install additional 
 COPY datascience/requirements.txt /tmp/requirements.txt
-RUN pip install -r requirements.txt
+RUN pip intall -r /tmp/requirements.txt
 
 USER root
 RUN fix-permissions "${CONDA_DIR}" && \

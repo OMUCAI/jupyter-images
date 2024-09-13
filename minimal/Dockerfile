@@ -31,7 +31,7 @@ COPY additional_package/*.whl /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} /tmp/${SCG_ROBOT_LIB} /tmp/${EXPERIMENT}
 # install additional 
 COPY minimal/requirements.txt /tmp/requirements.txt
-RUN pip intall -r requirements.txt
+RUN pip intall -r /tmp/requirements.txt
 
 USER root
 RUN fix-permissions "${CONDA_DIR}" && \
