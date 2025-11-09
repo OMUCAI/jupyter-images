@@ -1,6 +1,6 @@
 # Docker Images
 Docker Images to be used with JupyterHub.  
-It is adding pytct to a certain base image.  
+It is adding pitct to a certain base image.  
 
 ## Docker Registry
 This project uses Github container registry.  

@@ -75,25 +75,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      # Get Latest PyTCT
-      - name: Fetch Github Release Asset
-        id: pytct
-        uses: dsaltares/fetch-gh-release-asset@1.1.2
-        with:
-          repo: 'OMUCAI/PyTCT-docs'
-          version: 'latest'
-          regex: true
-          file: 'PyTCT-.*-cp311-cp311-manylinux_.*_x86_64.whl'
-          target: './additional_package/'
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Glob match
-        uses: tj-actions/glob@v21
-        id: glob
-        with:
-          files: PyTCT*.whl
-          working-directory: './additional_package'
     
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -106,7 +87,6 @@ jobs:
             latest=auto
           tags: |
             type=ref,event=tag
-            type=raw,value=pytct-${{ steps.pytct.outputs.version }}
       
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -119,7 +99,6 @@ jobs:
           push: ${{ (github.event_name != 'pull_request') || (github.event_name != 'workflow_dispatch') }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: PYTCT_WHL=${{ steps.glob.outputs.paths }}
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker

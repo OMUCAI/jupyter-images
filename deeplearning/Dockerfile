@@ -1,4 +1,4 @@
-FROM cschranz/gpu-jupyter:v1.6_cuda-12.0_ubuntu-22.04_python-only
+FROM cschranz/gpu-jupyter:v1.7_cuda-12.3_ubuntu-22.04_python-only
 
 LABEL maintainer="Masahiro Konishi <konikoni428@gmail.com>"
 
@@ -18,13 +18,11 @@ USER ${NB_UID}
 # install vscode extension(python, jupyter)
 RUN code-server --install-extension ms-python.python ms-toolsai.jupyter 
 
-# install pytct, scglib, experiment
-# Set latest version by github action
-ARG PYTCT_WHL
+# install scglib, experiment
 ARG SCG_ROBOT_LIB=SCGRobotLib-1.0.2-py3-none-any.whl
 ARG EXPERIMENT=experiment-1.0-py3-none-any.whl
 COPY additional_package/*.whl /tmp/
-RUN pip install --quiet --no-cache-dir /tmp/${PYTCT_WHL} /tmp/${SCG_ROBOT_LIB} /tmp/${EXPERIMENT}
+RUN pip install --quiet --no-cache-dir /tmp/${SCG_ROBOT_LIB} /tmp/${EXPERIMENT}
 # install additional 
 COPY deeplearning/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
