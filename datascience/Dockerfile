@@ -16,7 +16,14 @@ RUN CODE_VERSION=$(curl -sL https://api.github.com/repos/coder/code-server/relea
     && curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb \
     && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
     && rm -f code-server_${CODE_VERSION}_amd64.deb
-RUN /opt/conda/bin/conda install -c conda-forge jupyterlab-spellchecker jupyterlab-git jupyter-server-proxy jupyter-vscode-proxy
+RUN /opt/conda/bin/conda install -c conda-forge \
+    jupyterlab-spellchecker \
+    jupyterlab-git \
+    jupyter-server-proxy \
+    jupyter-vscode-proxy \
+    jupyter-ai \
+    jupyterlab-lsp \
+    python-lsp-server
 
 USER ${NB_UID}
 
