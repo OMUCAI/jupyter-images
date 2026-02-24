@@ -24,7 +24,7 @@ jobs:
   build:
     strategy:
       matrix:
-        env_names: ['minimal', 'datascience', 'deeplearning']
+        env_names: ['minimal', 'datascience', 'pytorch', 'tensorflow']
     
     runs-on: ubuntu-latest
     permissions:
@@ -37,7 +37,7 @@ jobs:
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
-        if: matrix.env_names == 'deeplearning'
+        if: matrix.env_names == 'pytorch' || matrix.env_names == 'tensorflow'
         with:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
