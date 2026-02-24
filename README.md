@@ -11,7 +11,7 @@ When put tags version, github ci will build image and push it to github registry
 ## Image list
 - minimal
 - datascience
-- deeplearning
+- pytorch
 - tensorflow
 
 ### minimal
@@ -22,7 +22,7 @@ Base image: jupyter/minimal-notebook
 Base image: jupyter/datascience-notebook  
 [Dockerhub](https://hub.docker.com/r/jupyter/datascience-notebook)
 
-### deeplearning
+### pytorch
 Base image: jupyter/pytorch-notebook (CUDA 12)  
 [Quay.io](https://quay.io/repository/jupyter/pytorch-notebook), [Github](https://github.com/jupyter/docker-stacks)  
 

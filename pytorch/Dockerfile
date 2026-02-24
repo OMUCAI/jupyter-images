@@ -28,7 +28,7 @@ ARG EXPERIMENT=experiment-1.0-py3-none-any.whl
 COPY additional_package/*.whl /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${SCG_ROBOT_LIB} /tmp/${EXPERIMENT}
 # install additional 
-COPY deeplearning/requirements.txt /tmp/requirements.txt
+COPY pytorch/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 USER root
