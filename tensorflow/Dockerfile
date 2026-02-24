@@ -50,7 +50,7 @@ RUN mkdir -p "${CONDA_DIR}/share/jupyter/lab/settings"
 COPY <<EOF ${CONDA_DIR}/share/jupyter/lab/settings/overrides.json
 {
   "@jupyter-lsp/jupyterlab-lsp:plugin": {
-    "languageServers": {
+    "language_servers": {
       "pylsp": {
         "serverSettings": {
           "pylsp": {
