@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 # hadolint global ignore=DL3006
 ARG BASE_IMAGE=quay.io/jupyter/datascience-notebook:x86_64-python-3.13
 FROM ${BASE_IMAGE}
@@ -37,16 +38,14 @@ RUN mamba install --yes -c conda-forge \
 RUN code-server --install-extension ms-python.python ms-toolsai.jupyter
 
 # Install custom wheel packages (auto-install all .whl files in additional_package/)
-COPY --chown=${NB_UID}:${NB_GID} additional_package/*.whl /tmp/wheels/
-RUN pip install --quiet --no-cache-dir /tmp/wheels/*.whl && \
-    rm -rf /tmp/wheels && \
+RUN --mount=type=bind,source=additional_package,target=/tmp/wheels \
+    pip install --quiet --no-cache-dir /tmp/wheels/*.whl && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
 # Install additional pip packages from requirements.txt
-COPY --chown=${NB_UID}:${NB_GID} datascience/requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt && \
-    rm -f /tmp/requirements.txt && \
+RUN --mount=type=bind,source=datascience/requirements.txt,target=/tmp/requirements.txt \
+    pip install --no-cache-dir -r /tmp/requirements.txt && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
