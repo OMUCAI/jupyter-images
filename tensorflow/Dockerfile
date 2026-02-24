@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/pytorch-notebook:cuda12-python-3.13
+FROM quay.io/jupyter/tensorflow-notebook:cuda-python-3.13
 
 LABEL maintainer="Masahiro Konishi <konikoni428@gmail.com>"
 
@@ -28,7 +28,7 @@ ARG EXPERIMENT=experiment-1.0-py3-none-any.whl
 COPY additional_package/*.whl /tmp/
 RUN pip install --quiet --no-cache-dir /tmp/${SCG_ROBOT_LIB} /tmp/${EXPERIMENT}
 # install additional 
-COPY deeplearning/requirements.txt /tmp/requirements.txt
+COPY tensorflow/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 USER root
