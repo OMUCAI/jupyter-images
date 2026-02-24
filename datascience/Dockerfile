@@ -27,10 +27,14 @@ RUN mamba install --yes -c conda-forge \
     jupyterlab-git \
     jupyter-server-proxy \
     jupyter-vscode-proxy \
-    jupyter-ai \
     jupyterlab-lsp \
     python-lsp-server && \
     mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install jupyter-ai v3 (beta) via pip (not yet available on conda-forge)
+RUN pip install --no-cache-dir --pre "jupyter-ai>=3.0.0b9" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
