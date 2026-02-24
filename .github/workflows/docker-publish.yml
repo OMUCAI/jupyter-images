@@ -1,4 +1,4 @@
-name: Docker
+name: Build and Publish Docker Images
 
 # based on https://github.com/actions/starter-workflows/blob/main/ci/docker-publish.yml
 # This workflow uses actions that are not certified by GitHub.
@@ -21,10 +21,10 @@ env:
 
 
 jobs:
-  build:
+  build-and-push:
     strategy:
       matrix:
-        env_names: ['minimal', 'datascience', 'pytorch', 'tensorflow']
+        image: ['minimal', 'datascience', 'pytorch', 'tensorflow']
     
     runs-on: ubuntu-latest
     permissions:
@@ -37,7 +37,7 @@ jobs:
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
-        if: matrix.env_names == 'pytorch' || matrix.env_names == 'tensorflow'
+        if: matrix.image == 'pytorch' || matrix.image == 'tensorflow'
         with:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
@@ -80,7 +80,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5.10.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.env_names }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.image }}
           flavor: |
             latest=auto
           tags: |
@@ -93,7 +93,7 @@ jobs:
         uses: docker/build-push-action@v6.18.0
         with:
           context: .
-          file: ${{ matrix.env_names }}/Dockerfile
+          file: ${{ matrix.image }}/Dockerfile
           push: ${{ github.ref_type == 'tag' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
