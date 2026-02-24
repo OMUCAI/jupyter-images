@@ -1,17 +1,21 @@
-FROM cschranz/gpu-jupyter:v1.7_cuda-12.3_ubuntu-22.04_python-only
+FROM quay.io/jupyter/pytorch-notebook:cuda12-python-3.11
 
 LABEL maintainer="Masahiro Konishi <konikoni428@gmail.com>"
 
-# Graphviz is already installed
-
 USER root
+RUN apt-get update --yes && \
+    apt-get install --yes --no-install-recommends \
+    # Common utilities
+    curl \
+    graphviz && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # install latest code server and extension
 RUN CODE_VERSION=$(curl -sL https://api.github.com/repos/coder/code-server/releases/latest | grep '"tag_name":' | sed 's/.*"v\([0-9.]*\)".*/\1/') \
     && curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb \
     && dpkg -i code-server_${CODE_VERSION}_amd64.deb \
     && rm -f code-server_${CODE_VERSION}_amd64.deb
-RUN /opt/conda/bin/conda install -c conda-forge jupyter-server-proxy jupyter-vscode-proxy
+RUN /opt/conda/bin/conda install -c conda-forge jupyterlab-spellchecker jupyterlab-git jupyter-server-proxy jupyter-vscode-proxy
 
 USER ${NB_UID}
 

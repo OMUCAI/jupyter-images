@@ -22,5 +22,5 @@ Base image: jupyter/datascience-notebook
 [Dockerhub](https://hub.docker.com/r/jupyter/datascience-notebook)
 
 ### deeplearning
-Base image: cschranz/gpu-jupyter  
-[Dockerhub](https://hub.docker.com/r/cschranz/gpu-jupyter), [Github](https://github.com/iot-salzburg/gpu-jupyter)  
+Base image: jupyter/pytorch-notebook (CUDA 12)  
+[Quay.io](https://quay.io/repository/jupyter/pytorch-notebook), [Github](https://github.com/jupyter/docker-stacks)  
