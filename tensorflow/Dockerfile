@@ -38,8 +38,23 @@ RUN pip install --no-cache-dir --pre "jupyter-ai>=3.0.0b9" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install VS Code extensions (python, jupyter)
-RUN code-server --install-extension ms-python.python ms-toolsai.jupyter
+# Install VS Code extensions into a cache directory outside the home directory.
+# (JupyterHub mounts a PVC over /home/jovyan at startup, which would erase any
+# extensions installed directly into ~/.local/share/code-server/extensions.)
+# A before-notebook.d hook copies them into the user's home on every container start.
+ENV VSCODE_EXT_CACHE=/opt/conda/code-server-extensions
+RUN mkdir -p "${VSCODE_EXT_CACHE}" && \
+    code-server --extensions-dir="${VSCODE_EXT_CACHE}" --install-extension ms-python.python && \
+    code-server --extensions-dir="${VSCODE_EXT_CACHE}" --install-extension ms-toolsai.jupyter && \
+    fix-permissions "${VSCODE_EXT_CACHE}"
+
+# Register a startup hook that copies cached extensions into the user's home directory.
+# cp -rn skips files that already exist, preserving any user-installed extensions.
+COPY --chmod=755 <<EOF /usr/local/bin/before-notebook.d/10-init-vscode-extensions.sh
+#!/bin/bash
+mkdir -p \${HOME}/.local/share/code-server/extensions
+cp -rn ${VSCODE_EXT_CACHE}/. \${HOME}/.local/share/code-server/extensions/
+EOF
 
 # Install custom wheel packages (auto-install all .whl files in additional_package/)
 RUN --mount=type=bind,source=additional_package,target=/tmp/wheels \
