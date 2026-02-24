@@ -23,7 +23,6 @@ USER ${NB_UID}
 
 # Install JupyterLab extensions via mamba
 RUN mamba install --yes -c conda-forge \
-    jupyterlab-spellchecker \
     jupyterlab-git \
     jupyter-server-proxy \
     jupyter-vscode-proxy \
@@ -37,6 +36,40 @@ RUN mamba install --yes -c conda-forge \
 RUN pip install --no-cache-dir --pre "jupyter-ai>=3.0.0b9" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
+
+# Configure JupyterLab LSP defaults.
+# Suppress pycodestyle warnings that are incompatible with Jupyter notebooks:
+#   E265 - block comment should start with '# ' (triggers on commented-out magics like #%matplotlib)
+#   E302 - expected 2 blank lines (cells contain short snippets; 2 blank lines looks sparse)
+#   E303 - too many blank lines (notebooks use blank lines between cells/sections)
+#   E305 - expected 2 blank lines after function/class definition (same reason as E302)
+#   E402 - module level import not at top of file (imports often follow markdown cells)
+# NOTE: COPY always runs as root, so we switch to root here to create the file
+USER root
+RUN mkdir -p "${CONDA_DIR}/share/jupyter/lab/settings"
+COPY <<EOF ${CONDA_DIR}/share/jupyter/lab/settings/overrides.json
+{
+  "@jupyter-lsp/jupyterlab-lsp:plugin": {
+    "languageServers": {
+      "pylsp": {
+        "serverSettings": {
+          "pylsp": {
+            "plugins": {
+              "pycodestyle": {
+                "ignore": ["E265", "E302", "E303", "E305", "E402"],
+                "maxLineLength": 120
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+RUN fix-permissions "${CONDA_DIR}/share/jupyter/lab/settings"
+
+USER ${NB_UID}
 
 # Install VS Code extensions into a cache directory outside the home directory.
 # (JupyterHub mounts a PVC over /home/jovyan at startup, which would erase any
