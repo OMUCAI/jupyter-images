@@ -16,11 +16,11 @@ When put tags version, github ci will build image and push it to github registry
 
 ### minimal
 Base image: jupyter/minimal-notebook  
-[Dockerhub](https://hub.docker.com/r/jupyter/minimal-notebook)
+[Quay.io](https://quay.io/repository/jupyter/minimal-notebook), [Github](https://github.com/jupyter/docker-stacks)  
 
 ### datascience
 Base image: jupyter/datascience-notebook  
-[Dockerhub](https://hub.docker.com/r/jupyter/datascience-notebook)
+[Quay.io](https://quay.io/repository/jupyter/datascience-notebook), [Github](https://github.com/jupyter/docker-stacks)  
 
 ### pytorch
 Base image: jupyter/pytorch-notebook (CUDA 12)  
