@@ -51,14 +51,8 @@ COPY --chown=${NB_UID}:${NB_GID} <<EOF ${CONDA_DIR}/share/jupyter/lab/settings/o
     "language_servers": {
       "pylsp": {
         "serverSettings": {
-          "pylsp": {
-            "plugins": {
-              "pycodestyle": {
-                "ignore": ["E265", "E302", "E303", "E305", "E402"],
-                "maxLineLength": 120
-              }
-            }
-          }
+          "pylsp.plugins.pycodestyle.ignore": ["E265", "E302", "E303", "E305", "E402"],
+          "pylsp.plugins.pycodestyle.maxLineLength": 120
         }
       }
     }
