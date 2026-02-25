@@ -44,10 +44,8 @@ RUN pip install --no-cache-dir --pre "jupyter-ai>=3.0.0b9" && \
 #   E303 - too many blank lines (notebooks use blank lines between cells/sections)
 #   E305 - expected 2 blank lines after function/class definition (same reason as E302)
 #   E402 - module level import not at top of file (imports often follow markdown cells)
-# NOTE: COPY always runs as root, so we switch to root here to create the file
-USER root
 RUN mkdir -p "${CONDA_DIR}/share/jupyter/lab/settings"
-COPY <<EOF ${CONDA_DIR}/share/jupyter/lab/settings/overrides.json
+COPY --chown=${NB_UID}:${NB_GID} <<EOF ${CONDA_DIR}/share/jupyter/lab/settings/overrides.json
 {
   "@jupyter-lsp/jupyterlab-lsp:plugin": {
     "language_servers": {
@@ -67,7 +65,6 @@ COPY <<EOF ${CONDA_DIR}/share/jupyter/lab/settings/overrides.json
   }
 }
 EOF
-RUN fix-permissions "${CONDA_DIR}/share/jupyter/lab/settings"
 
 USER ${NB_UID}
 # Install VS Code extensions into a cache directory outside the home directory.
