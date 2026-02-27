@@ -26,6 +26,8 @@ RUN mamba install --yes -c conda-forge \
     jupyterlab-git \
     jupyter-server-proxy \
     jupyter-vscode-proxy \
+    jupyter-marimo-proxy \
+    marimo \
     jupyter-resource-usage \
     notebook-intelligence \
     jupyterlab-code-formatter \
