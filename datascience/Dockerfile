@@ -30,7 +30,8 @@ RUN mamba install --yes -c conda-forge \
     marimo \
     jupyterlab-lsp \
     python-lsp-server \
-    python-lsp-ruff \
+    pycodestyle \
+    pyflakes \
     ruff && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \

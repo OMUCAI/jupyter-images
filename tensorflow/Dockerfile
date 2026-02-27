@@ -30,7 +30,8 @@ RUN mamba install --yes -c conda-forge \
     marimo \
     jupyterlab-lsp \
     python-lsp-server \
-    python-lsp-ruff \
+    pycodestyle \
+    pyflakes \
     ruff && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
@@ -44,7 +45,7 @@ RUN pip install --no-cache-dir --pre \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Configure JupyterLab settings (LSP/ruff lint, code formatter).
+# Configure JupyterLab settings (LSP lint, code formatter).
 # See shared/overrides.json for the full configuration.
 RUN mkdir -p "${CONDA_DIR}/share/jupyter/lab/settings"
 COPY --chown=${NB_UID}:${NB_GID} tensorflow/overrides.json ${CONDA_DIR}/share/jupyter/lab/settings/overrides.json

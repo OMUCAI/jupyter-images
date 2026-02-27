@@ -3,13 +3,10 @@
     "language_servers": {
       "pylsp": {
         "serverSettings": {
-          "pylsp.plugins.ruff.enabled": true,
-          "pylsp.plugins.ruff.formatEnabled": false,
-          "pylsp.plugins.ruff.ignore": ["E203", "E265", "E302", "E303", "E305", "E402"],
-          "pylsp.plugins.ruff.lineLength": 120,
-          "pylsp.plugins.ruff.targetVersion": "py312",
-          "pylsp.plugins.pycodestyle.enabled": false,
-          "pylsp.plugins.pyflakes.enabled": false,
+          "pylsp.plugins.pycodestyle.enabled": true,
+          "pylsp.plugins.pycodestyle.ignore": ["E203", "E265", "E302", "E303", "E305", "E402"],
+          "pylsp.plugins.pycodestyle.maxLineLength": 120,
+          "pylsp.plugins.pyflakes.enabled": true,
           "pylsp.plugins.mccabe.enabled": false,
           "pylsp.plugins.autopep8.enabled": false,
           "pylsp.plugins.yapf.enabled": false
