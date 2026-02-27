@@ -28,7 +28,6 @@ RUN mamba install --yes -c conda-forge \
     jupyter-vscode-proxy \
     jupyter-marimo-proxy \
     marimo \
-    jupyter-resource-usage \
     jupyterlab-lsp \
     python-lsp-server \
     python-lsp-ruff \
