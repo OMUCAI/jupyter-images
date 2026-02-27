@@ -29,8 +29,6 @@ RUN mamba install --yes -c conda-forge \
     jupyter-marimo-proxy \
     marimo \
     jupyter-resource-usage \
-    notebook-intelligence \
-    jupyterlab-code-formatter \
     jupyterlab-lsp \
     python-lsp-server \
     python-lsp-ruff \ 
@@ -39,8 +37,11 @@ RUN mamba install --yes -c conda-forge \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install jupyter-ai v3 (beta) via pip (not yet available on conda-forge)
-RUN pip install --no-cache-dir --pre "jupyter-ai>=3.0.0b9" && \
+# Install additional packages via pip (not available on conda-forge)
+RUN pip install --no-cache-dir --pre \
+    "jupyter-ai>=3.0.0b9" \
+    jupyterlab-code-formatter \
+    notebook-intelligence && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
