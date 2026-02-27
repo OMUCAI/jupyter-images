@@ -26,8 +26,13 @@ RUN mamba install --yes -c conda-forge \
     jupyterlab-git \
     jupyter-server-proxy \
     jupyter-vscode-proxy \
+    jupyter-resource-usage \
+    notebook-intelligence \
+    jupyterlab-code-formatter \
     jupyterlab-lsp \
-    python-lsp-server && \
+    python-lsp-server \
+    python-lsp-ruff \ 
+    ruff && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
@@ -37,28 +42,10 @@ RUN pip install --no-cache-dir --pre "jupyter-ai>=3.0.0b9" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Configure JupyterLab LSP defaults.
-# Suppress pycodestyle warnings that are incompatible with Jupyter notebooks:
-#   E265 - block comment should start with '# ' (triggers on commented-out magics like #%matplotlib)
-#   E302 - expected 2 blank lines (cells contain short snippets; 2 blank lines looks sparse)
-#   E303 - too many blank lines (notebooks use blank lines between cells/sections)
-#   E305 - expected 2 blank lines after function/class definition (same reason as E302)
-#   E402 - module level import not at top of file (imports often follow markdown cells)
+# Configure JupyterLab settings (LSP/ruff lint, code formatter).
+# See shared/overrides.json for the full configuration.
 RUN mkdir -p "${CONDA_DIR}/share/jupyter/lab/settings"
-COPY --chown=${NB_UID}:${NB_GID} <<EOF ${CONDA_DIR}/share/jupyter/lab/settings/overrides.json
-{
-  "@jupyter-lsp/jupyterlab-lsp:plugin": {
-    "language_servers": {
-      "pylsp": {
-        "serverSettings": {
-          "pylsp.plugins.pycodestyle.ignore": ["E265", "E302", "E303", "E305", "E402"],
-          "pylsp.plugins.pycodestyle.maxLineLength": 120
-        }
-      }
-    }
-  }
-}
-EOF
+COPY --chown=${NB_UID}:${NB_GID} minimal/overrides.json ${CONDA_DIR}/share/jupyter/lab/settings/overrides.json
 
 # Install VS Code extensions into a cache directory outside the home directory.
 # (JupyterHub mounts a PVC over /home/jovyan at startup, which would erase any

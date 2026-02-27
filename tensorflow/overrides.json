@@ -1,0 +1,45 @@
+{
+  "@jupyter-lsp/jupyterlab-lsp:plugin": {
+    "language_servers": {
+      "pylsp": {
+        "serverSettings": {
+          "pylsp.plugins.ruff.enabled": true,
+          "pylsp.plugins.ruff.formatEnabled": false,
+          "pylsp.plugins.ruff.ignore": ["E203", "E265", "E302", "E303", "E305", "E402"],
+          "pylsp.plugins.ruff.lineLength": 120,
+          "pylsp.plugins.ruff.targetVersion": "py312",
+          "pylsp.plugins.pycodestyle.enabled": false,
+          "pylsp.plugins.pyflakes.enabled": false,
+          "pylsp.plugins.mccabe.enabled": false,
+          "pylsp.plugins.autopep8.enabled": false,
+          "pylsp.plugins.yapf.enabled": false
+        }
+      }
+    }
+  },
+  "@ryantam626/jupyterlab_code_formatter:settings": {
+    "preferences": {
+      "default_formatter": {
+        "python": ["ruff", "ruffformat"]
+      }
+    },
+    "ruff": {
+      "args": [
+        "--extend-select=I",
+        "--unfixable=F401,F841",
+        "--ignore=E203,E265,E302,E303,E305,E402",
+        "--line-length=120",
+        "--target-version=py312",
+        "--quiet"
+      ]
+    },
+    "ruffformat": {
+      "args": [
+        "--line-length=120",
+        "--quiet"
+      ]
+    },
+    "formatOnSave": false,
+    "suppressFormatterErrorsIFFAutoFormatOnSave": true
+  }
+}
