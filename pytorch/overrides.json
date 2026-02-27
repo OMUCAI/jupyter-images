@@ -29,14 +29,12 @@
         "--unfixable=F401,F841",
         "--ignore=E203,E265,E302,E303,E305,E402",
         "--line-length=120",
-        "--target-version=py312",
-        "--quiet"
+        "--target-version=py312"
       ]
     },
     "ruffformat": {
       "args": [
-        "--line-length=120",
-        "--quiet"
+        "--line-length=120"
       ]
     },
     "formatOnSave": false,
