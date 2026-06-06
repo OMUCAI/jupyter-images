@@ -24,7 +24,7 @@ jobs:
   build-and-push:
     strategy:
       matrix:
-        image: ['minimal', 'datascience', 'pytorch', 'tensorflow']
+        image: ['minimal', 'datascience', 'pytorch', 'tensorflow', 'isaac-sim']
     
     runs-on: ubuntu-latest
     permissions:
@@ -37,7 +37,7 @@ jobs:
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
-        if: matrix.image == 'pytorch' || matrix.image == 'tensorflow'
+        if: matrix.image == 'pytorch' || matrix.image == 'tensorflow' || matrix.image == 'isaac-sim'
         with:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
@@ -74,6 +74,15 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      # NGC レジストリへのログイン（isaac-sim のみ）
+      - name: Log into NGC registry (nvcr.io)
+        if: matrix.image == 'isaac-sim'
+        uses: docker/login-action@v4.1.0
+        with:
+          registry: nvcr.io
+          username: ${{ secrets.NGC_USERNAME }}
+          password: ${{ secrets.NGC_API_KEY }}
     
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
