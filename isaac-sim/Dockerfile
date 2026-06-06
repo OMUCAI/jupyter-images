@@ -67,7 +67,7 @@ RUN mkdir -p /etc/jupyter
 # ── jupyter-server-proxy: Isaac Sim WebRTC エントリポイント設定 ──────────────
 # Isaac Sim の WebRTC ストリーミングは HTTP port 8211 で待ち受ける。
 # jupyter-server-proxy でそのエンドポイントを /isaac-sim/ にプロキシする。
-COPY jupyter_server_proxy_config.py /etc/jupyter/jupyter_server_proxy_config.py
+COPY isaac-sim/jupyter_server_proxy_config.py /etc/jupyter/jupyter_server_proxy_config.py
 
 # ── Python パッケージ（pip）─────────────────────────────────────────────────
 RUN pip3 install --no-cache-dir --break-system-packages \
@@ -90,7 +90,7 @@ RUN { \
     } >> /etc/jupyter/jupyter_lab_config.py
 
 # ── 起動スクリプト ────────────────────────────────────────────────────────────
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY isaac-sim/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # ── ファイル所有権調整 ─────────────────────────────────────────────────────────
