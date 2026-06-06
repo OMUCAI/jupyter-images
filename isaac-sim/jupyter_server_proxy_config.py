@@ -3,8 +3,9 @@ jupyter_server_proxy_config.py
 Isaac Sim の WebRTC ストリーミングエンドポイントを
 JupyterLab の /isaac-sim/ パスにリバースプロキシする設定。
 
-Isaac Sim は起動後に以下のポートで HTTP を待ち受ける:
-  - 8211: WebRTC ストリーミング UI (Streaming Client)
+Isaac Sim 6.x は起動後に以下のポートで HTTP を待ち受ける:
+  - 49100 (TCP): WebRTC シグナリングポート (旧バージョンでは 8211)
+  - 47998 (UDP): WebRTC メディアストリームポート
 
 このファイルは /etc/jupyter/ に配置し、JupyterLab 起動時に自動読み込みされる。
 """
@@ -14,8 +15,9 @@ Isaac Sim は起動後に以下のポートで HTTP を待ち受ける:
 
 c.ServerProxy.servers = {
     "isaac-sim": {
-        # Isaac Sim の WebRTC ストリーミングポートへプロキシ
-        "port": 8211,
+        # Isaac Sim 6.x の WebRTC シグナリングポートへプロキシ
+        # (Isaac Sim 4.x では 8211 を使用していたが 6.x では 49100 に変更)
+        "port": 49100,
         # JupyterLab のランチャーに表示するアイコン・ラベル
         "launcher_entry": {
             "enabled": True,

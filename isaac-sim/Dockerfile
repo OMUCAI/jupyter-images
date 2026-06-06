@@ -24,7 +24,7 @@ LABEL org.opencontainers.image.title="Isaac Sim + JupyterLab"
 LABEL org.opencontainers.image.description="NVIDIA Isaac Sim with JupyterLab and WebRTC streaming support"
 LABEL org.opencontainers.image.source="https://github.com/omucai/helm-values"
 
-# Isaac Sim 6.0.0 は非rootユーザーで起動するため、ビルド時は root に切り替える
+# ビルド時は root に切り替える
 USER root
 
 # ── 環境変数 ──────────────────────────────────────────────────────────────────
@@ -37,12 +37,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
     TZ=Asia/Tokyo
 
 # JupyterLab / ユーザー設定
-# ベースイメージに ubuntu(UID=1000) が既に存在するためそれを流用する
+# ベースイメージの isaac-sim ユーザー (UID=1234) をそのまま使用する
+# /isaac-sim (パーミッション 750, 所有者 isaac-sim) へのアクセスを維持するため
 ENV JUPYTER_PORT=8888 \
     JUPYTERHUB_SERVICE_PREFIX="" \
-    HOME=/home/ubuntu \
-    NB_USER=ubuntu \
-    NB_UID=1000
+    HOME=/home/isaac-sim \
+    NB_USER=isaac-sim \
+    NB_UID=1234
 
 # ── システム依存パッケージ ────────────────────────────────────────────────────
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -56,17 +57,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         gosu \
     && rm -rf /var/lib/apt/lists/*
 
-# ── ubuntu ユーザーに sudo 権限付与（JupyterHub 標準慣例）──────────────────
-# ベースイメージに ubuntu(UID=1000) が既に存在するため useradd は不要
-RUN echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
-    mkdir -p /home/ubuntu
+# ── isaac-sim ユーザーのホームディレクトリとsudo権限設定 ────────────────────────
+# ベースイメージでは HOME=/isaac-sim だが、JupyterLab 用に別途ホームを作成する
+# /isaac-sim はアプリケーションディレクトリとして残す
+RUN mkdir -p /home/isaac-sim && \
+    chown isaac-sim:isaac-sim /home/isaac-sim && \
+    usermod -d /home/isaac-sim isaac-sim && \
+    echo "isaac-sim ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # ── /etc/jupyter ディレクトリを先に作成 ──────────────────────────────────────
 RUN mkdir -p /etc/jupyter
 
 # ── jupyter-server-proxy: Isaac Sim WebRTC エントリポイント設定 ──────────────
-# Isaac Sim の WebRTC ストリーミングは HTTP port 8211 で待ち受ける。
-# jupyter-server-proxy でそのエンドポイントを /isaac-sim/ にプロキシする。
 COPY isaac-sim/jupyter_server_proxy_config.py /etc/jupyter/jupyter_server_proxy_config.py
 
 # ── Python パッケージ（pip）─────────────────────────────────────────────────
@@ -94,10 +96,10 @@ COPY isaac-sim/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # ── ファイル所有権調整 ─────────────────────────────────────────────────────────
-RUN chown -R ubuntu:ubuntu /home/ubuntu /etc/jupyter
+RUN chown -R isaac-sim:isaac-sim /home/isaac-sim /etc/jupyter
 
-WORKDIR /home/ubuntu
-USER ubuntu
+WORKDIR /home/isaac-sim
+USER isaac-sim
 
 EXPOSE ${JUPYTER_PORT}
 
